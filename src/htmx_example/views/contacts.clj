@@ -18,15 +18,15 @@
 
 (defn- contact-row [{:keys [id first last phone email]}]
   [:tr
-   [:td [:a {:href (format "/contacts/show/%s" id)} id]]
+   [:td [:a {:href (format "/contacts/%s/show" id)} id]]
    [:td first]
    [:td last]
    [:td phone]
    [:td email]
    [:td
-    [:a {:href (str "/contacts/" id "/edit")} "Edit"]]
+    [:a {:href (format "/contacts/%s/edit" id)} "Edit"]]
    [:td
-    [:a {:href (str "/contacts/" id)} "View"]]])
+    [:a {:href (format "/contacts/%s/show" id)} "View"]]])
 
 (defn- contacts-table [contacts]
   [:table {:class "table"}
@@ -41,8 +41,8 @@
          [:div {:class "search"} (search-form search)]
          [:div {:class "contacts"} (contacts-table contacts)]]))
 
-(defn- contact-new-form [& {:keys [email first last phone]
-                            :or {email "" first "" last "" phone ""}}]
+(defn- contact-form [& {:keys [email first last phone]
+                        :or {email "" first "" last "" phone ""}}]
   [:div
    [:form
     {:action "/contacts/new", :method "post"}
@@ -108,7 +108,14 @@
   (html
    [:div {:class "container"}
     [:h1 "New Contact"]
-    [:div (contact-new-form)]]))
+    [:div (contact-form)]]))
+
+(defn contacts-edit-page
+  [contact]
+  (html
+   [:div {:class "container"}
+    [:h1 "Edit Contact"]
+    [:div (contact-form contact)]]))
 
 (defn contacts-show-page
   [{:keys [id phone email last first] :as _contact}]

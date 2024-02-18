@@ -23,6 +23,13 @@
       (not-found)
       (success (str (h/html (views/contacts-show-page contact)))))))
 
+(defn contacts-edit-handler
+  [{{{:keys [contact-id]} :path} :parameters}]
+  (let [contact (contact/get contact-id)]
+    (if (nil? contact)
+      (not-found)
+      (success (str (h/html (views/contacts-edit-page contact)))))))
+
 (defn contacts-create-handler
   [{{{:keys [last_name first_name phone email]} :form} :parameters}]
   (try

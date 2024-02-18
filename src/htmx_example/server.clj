@@ -25,8 +25,10 @@
                                                   [:phone string?]
                                                   [:email string?]]}
                               :handler contacts/contacts-create-handler}}]
-     ["/contacts/show/:contact-id" {:parameters {:path [:map [:contact-id int?]]}
+     ["/contacts/:contact-id/show" {:parameters {:path [:map [:contact-id int?]]}
                                     :get {:handler contacts/contacts-show-handler}}]
+     ["/contacts/:contact-id/edit" {:parameters {:path [:map [:contact-id int?]]}
+                                    :get {:handler contacts/contacts-edit-handler}}]
      ["/api"
       ["/math" {:get {:parameters {:query {:x int?, :y int?}}
                       :responses  {200 {:body {:total int?}}}
