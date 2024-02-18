@@ -9,3 +9,7 @@
   {:status 200
    :body body
    :headers {"Content-Type" mime-type}})
+
+(defn not-found []
+  {:status 404
+   :body "<h1>Not found</h1>"})

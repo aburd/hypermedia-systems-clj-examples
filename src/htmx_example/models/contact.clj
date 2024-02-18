@@ -26,3 +26,6 @@
                         :last last
                         :phone phone
                         :email email}))
+
+(defn get [id]
+  (first (filter #(= id (:id %)) @contacts)))
