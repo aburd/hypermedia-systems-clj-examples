@@ -5,6 +5,8 @@
             :url "https://www.eclipse.org/legal/epl-2.0/"}
   :dependencies [[org.clojure/clojure "1.11.1"]
                  [ring/ring "1.11.0"]
+                 [ring-logger/ring-logger "1.1.1"]
+                 [clj-log4j2/clj-log4j2 "0.4.0"]
                  [metosin/reitit "0.7.0-alpha7"]
                  [metosin/muuntaja "0.6.8"]
                  [hiccup "2.0.0-RC3"]
@@ -13,7 +15,8 @@
   :main ^:skip-aot htmx-example.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all
-                       :jvm-opts ["-Dclojure.compiler.direct-linking=true"]}
+                       :jvm-opts ["-Dclojure.compiler.direct-linking=true"
+                                  "-Dclojure.tools.logging.factory=clojure.tools.logging.impl/log4j2-factory"]}
              :dev {:dependencies [[com.github.flow-storm/clojure "RELEASE"]
                                   [com.github.flow-storm/flow-storm-dbg "RELEASE"]]
                    :exclusions [org.clojure/clojure] ;; for disabling the official compiler
