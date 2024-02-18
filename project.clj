@@ -18,4 +18,4 @@
                                   [com.github.flow-storm/flow-storm-dbg "RELEASE"]]
                    :exclusions [org.clojure/clojure] ;; for disabling the official compiler
                    :jvm-opts ["-Dclojure.storm.instrumentEnable=true"
-                              "-Dclojure.storm.instrumentOnlyPrefixes=htmx-example."]}})
+                              "-Dclojure.storm.instrumentOnlyPrefixes=htmx-example.,reitit.ring."]}})

@@ -17,7 +17,14 @@
    (ring/router
     [["/" {:get {:handler (fn [_req] (redirect "/contacts"))}}]
      ["/contacts" {:parameters {:query [:map [:search {:optional true} string?]]}
-                   :get {:handler contacts/get-contacts-handler}}]
+                   :get {:handler contacts/contacts-handler}}]
+     ["/contacts/new" {:get {:handler contacts/contacts-new-handler}
+                       :post {:parameters {:form [:map
+                                                  [:first_name string?]
+                                                  [:last_name string?]
+                                                  [:phone string?]
+                                                  [:email string?]]}
+                              :handler contacts/contacts-create-handler}}]
      ["/api"
       ["/math" {:get {:parameters {:query {:x int?, :y int?}}
                       :responses  {200 {:body {:total int?}}}
