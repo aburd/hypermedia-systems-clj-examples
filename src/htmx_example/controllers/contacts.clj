@@ -16,12 +16,12 @@
   (let [html (views/contacts-new-page)]
     (success (str (h/html html)))))
 
-(defn contacts-show-handler
+(defn contact-handler
   [{{{:keys [contact-id]} :path} :parameters}]
   (let [contact (contact/get contact-id)]
     (if (nil? contact)
       (not-found)
-      (success (str (h/html (views/contacts-show-page contact)))))))
+      (success (str (h/html (views/contact-page contact)))))))
 
 (defn contacts-delete-handler
   [{{{:keys [contact-id]} :path} :parameters}]
@@ -30,28 +30,29 @@
       (not-found)
       (do
         (contact/delete contact-id)
-        (redirect "/contacts")))))
+        (success nil)))))
 
 (defn contacts-edit-handler
   [{{{:keys [contact-id]} :path} :parameters}]
   (let [contact (contact/get contact-id)]
     (if (nil? contact)
       (not-found)
-      (success (str (h/html (views/contacts-edit-page contact)))))))
+      (success (str (h/html (views/contact-row-edit contact)))))))
 
 (defn contacts-update-handler
   [{{{:keys [contact-id]} :path
-     {:keys [last_name first_name phone email]} :form}
+     {:keys [last first phone email]} :form}
     :parameters}]
   (let [contact (contact/get contact-id)]
     (if (nil? contact)
       (not-found)
       (try
-        (contact/update {:id contact-id :first first_name :last last_name :email email :phone phone})
-        (redirect "/contacts")
+        (contact/update {:id contact-id :first first :last last :email email :phone phone})
+        (success
+         (str (h/html (views/contact-row (contact/get contact-id)))))
         (catch Exception e
           (println e)
-          (redirect (format "/contacts/%s/edit" contact-id)))))))
+          {:status 500})))))
 
 (defn contacts-create-handler
   [{{{:keys [last_name first_name phone email]} :form} :parameters}]
@@ -60,5 +61,5 @@
     (redirect "/contacts")
     (catch Exception e
       (println e)
-      (redirect "/contacts/new"))))
+      (redirect "/contact"))))
 

@@ -8,7 +8,8 @@
    [reitit.ring.middleware.parameters :as parameters]
    [ring.adapter.jetty :as jetty]
    [htmx-example.controllers.contacts :as contacts]
-   [htmx-example.response :refer [redirect]]))
+   [htmx-example.response :refer [redirect]]
+   [ring.logger :as logger]))
 
 (defonce ^:private s (atom nil))
 
@@ -18,35 +19,29 @@
     [["/" {:get {:handler (fn [_req] (redirect "/contacts"))}}]
      ["/contacts" {:parameters {:query [:map [:search {:optional true} string?]]}
                    :get {:handler contacts/contacts-handler}}]
-     ["/contacts/new" {:get {:handler contacts/contacts-new-handler}
-                       :post {:parameters {:form [:map
-                                                  [:first_name string?]
-                                                  [:last_name string?]
-                                                  [:phone string?]
-                                                  [:email string?]]}
-                              :handler contacts/contacts-create-handler}}]
-     ["/contacts/:contact-id/show" {:parameters {:path [:map [:contact-id int?]]}
-                                    :get {:handler contacts/contacts-show-handler}}]
-     ["/contacts/:contact-id/delete" {:parameters {:path [:map [:contact-id int?]]}
-                                      :get {:handler contacts/contacts-delete-handler}}]
+     ["/contact" {:get {:handler contacts/contacts-new-handler}
+                  :post {:parameters {:form [:map
+                                             [:first_name string?]
+                                             [:last_name string?]
+                                             [:phone string?]
+                                             [:email string?]]}
+                         :handler contacts/contacts-create-handler}}]
+     ["/contacts/:contact-id" {:parameters {:path [:map [:contact-id int?]]}
+                               :get {:handler contacts/contact-handler}
+                               :delete {:handler contacts/contacts-delete-handler}
+                               :put {:handler contacts/contacts-update-handler
+                                     :parameters {:form [:map
+                                                         [:first string?]
+                                                         [:last string?]
+                                                         [:phone string?]
+                                                         [:email string?]]}}}]
      ["/contacts/:contact-id/edit" {:parameters {:path [:map [:contact-id int?]]}
-                                    :get {:handler contacts/contacts-edit-handler}
-                                    :post {:handler contacts/contacts-update-handler
-                                           :parameters {:form [:map
-                                                               [:first_name string?]
-                                                               [:last_name string?]
-                                                               [:phone string?]
-                                                               [:email string?]]}}}]
-     ["/api"
-      ["/math" {:get {:parameters {:query {:x int?, :y int?}}
-                      :responses  {200 {:body {:total int?}}}
-                      :handler    (fn [{{{:keys [x y]} :query} :parameters}]
-                                    {:status 200
-                                     :body   {:total (+ x y)}})}}]]]
+                                    :get {:handler contacts/contacts-edit-handler}}]]
       ;; router data affecting all routes
     {:data {:coercion   malli/coercion
             :muuntaja   m/instance
-            :middleware [parameters/parameters-middleware
+            :middleware [logger/wrap-with-logger
+                         parameters/parameters-middleware
                          rrc/coerce-request-middleware
                          muuntaja/format-response-middleware
                          rrc/coerce-response-middleware]}})))

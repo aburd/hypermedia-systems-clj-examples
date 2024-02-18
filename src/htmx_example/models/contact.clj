@@ -9,10 +9,10 @@
   {:id (rand-int 1000) :first (name/first-name) :last (name/last-name) :phone (first (phone/phone-numbers)) :email (internet/email)})
 
 (defonce contacts
-  (atom [vec (take
+  (atom (vec (take
               10
               (repeatedly
-               #(generate-contact)))]))
+               #(generate-contact))))))
 
 ; (reset! contacts (vec (take
 ;                        10
