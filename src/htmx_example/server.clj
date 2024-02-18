@@ -19,6 +19,8 @@
     [["/" {:get {:handler (fn [_req] (redirect "/contacts"))}}]
      ["/contacts" {:parameters {:query [:map [:search {:optional true} string?]]}
                    :get {:handler contacts/contacts-handler}}]
+     ["/contacts-table" {:parameters {:query [:map [:search {:optional true} string?]]}
+                         :get {:handler contacts/contacts-table-handler}}]
      ["/contact" {:get {:handler contacts/contacts-new-handler}
                   :post {:parameters {:form [:map
                                              [:first_name string?]

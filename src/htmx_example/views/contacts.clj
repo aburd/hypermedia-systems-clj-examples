@@ -5,7 +5,10 @@
 (defn- search-form
   [search]
   [:form
-   {:action "/contacts", :method "get", :class "tool-bar"}
+   {:hx-get "/contacts-table"
+    :hx-target ".contacts"
+    :hx-swap "innerHTML"
+    :class "tool-bar"}
    [:div {:class "mb-3"}
     [:label {:for "search" :class "form-label"} "Search Term"]
     [:input
@@ -87,7 +90,7 @@
          :hx-confirm delete-confirm-msg}
         "Delete"]]]]))
 
-(defn- contacts-table [contacts]
+(defn contacts-table [contacts]
   [:table {:class "table table-hover"}
    [:thead
     [:tr [:th "ID"] [:th "First"] [:th "Last"] [:th "Phone"] [:th "Email"] [:th] [:th] [:th]]]

@@ -11,6 +11,13 @@
     (success
      (str (h/html html)))))
 
+(defn contacts-table-handler
+  [{{{:keys [search]} :query} :parameters}]
+  (let [contacts (contact/search search)
+        html (views/contacts-table contacts)]
+    (success
+     (str (h/html html)))))
+
 (defn contacts-new-handler
   [_req]
   (let [html (views/contacts-new-page)]
