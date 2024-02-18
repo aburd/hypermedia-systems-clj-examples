@@ -6,13 +6,15 @@
   [search]
   [:form
    {:action "/contacts", :method "get", :class "tool-bar"}
-   [:label {:for "search"} "Search Term"]
-   [:input
-    {:id "search",
-     :type "search",
-     :name "search",
-     :value search}]
-   [:input {:type "submit", :value "Search"}]])
+   [:div {:class "mb-3"}
+    [:label {:for "search" :class "form-label"} "Search Term"]
+    [:input
+     {:id "search",
+      :class "form-control"
+      :type "search",
+      :name "search",
+      :value search}]]
+   [:button {:type "submit" :class "btn btn-primary"} "Search"]])
 
 (defn- contact-row [{:keys [id first last phone email]}]
   [:tr
@@ -20,17 +22,21 @@
    [:td first]
    [:td last]
    [:td phone]
-   [:td email
-    [:a {:href (str "/contacts/" id "/edit")} "Edit"]
+   [:td email]
+   [:td
+    [:a {:href (str "/contacts/" id "/edit")} "Edit"]]
+   [:td
     [:a {:href (str "/contacts/" id)} "View"]]])
 
 (defn- contacts-table [contacts]
-  [:table
+  [:table {:class "table"}
    [:thead
-    [:tr [:td "ID"] [:th "First"] [:th "Last"] [:th "Phone"] [:th "Email"]]]
-   (concat [:tbody] (map contact-row contacts))])
+    [:tr [:td "ID"] [:th "First"] [:th "Last"] [:th "Phone"] [:th "Email"] [:th] [:th]]]
+   (vec (concat [:tbody] (map contact-row contacts)))])
 
 (defn contacts-page [contacts search]
   (html [:div {:class "container"}
+         [:h1 "Contacts"]
+         [:h2 "A Demo Contacts Application"]
          [:div {:class "search"} (search-form search)]
          [:div {:class "contacts"} (contacts-table contacts)]]))

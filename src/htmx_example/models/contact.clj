@@ -1,5 +1,6 @@
 (ns htmx-example.models.contact
   (:require
+   [clojure.string :as s]
    [faker.name :as name]
    [faker.phone-number :as phone]
    [faker.internet :as internet]))
@@ -9,7 +10,7 @@
 
 (def contacts
   (take
-   10
+   100
    (repeatedly
     #(generate-contact))))
 
@@ -17,4 +18,4 @@
   [search]
   (vec (if (or (nil? search) (empty? search))
          contacts
-         (filter #(or (= search (:first %)) (= search (:last %))) contacts))))
+         (filter #(or (s/includes? (:first %) search) (s/includes? (:last %) search)) contacts))))
