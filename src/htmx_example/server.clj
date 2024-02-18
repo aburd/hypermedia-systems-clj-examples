@@ -7,90 +7,17 @@
    [reitit.ring.middleware.muuntaja :as muuntaja]
    [reitit.ring.middleware.parameters :as parameters]
    [ring.adapter.jetty :as jetty]
-   [hiccup2.core :as h]
-   [faker.name :as name]
-   [faker.phone-number :as phone]
-   [faker.internet :as internet]))
+   [htmx-example.controllers.contacts :as contacts]
+   [htmx-example.response :refer [redirect]]))
 
 (defonce ^:private s (atom nil))
-
-(defn redirect [url]
-  {:status 301
-   :headers {"Location" url}})
-
-(defn success [body & {:keys [mime-type]
-                       :or {mime-type "text/html"}}]
-  {:status 200
-   :body body
-   :headers {"Content-Type" mime-type}})
-
-(defn html [body]
-  (h/html [:html
-           [:head
-            [:meta {:charset "utf-8"}]
-            [:meta {:name "viewport" :content "width=device-width, initial-scale=1"}]
-            [:link {:rel "stylesheet"
-                    :href "https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"}]]
-           [:body body]]))
-
-(defn generate-contact []
-  {:id (rand-int 1000) :first (name/first-name) :last (name/last-name) :phone (first (phone/phone-numbers)) :email (internet/email)})
-
-(def contacts
-  (take
-   10
-   (repeatedly
-    #(generate-contact))))
-
-(defn search-contacts
-  [search]
-  (vec (if (or (nil? search) (empty? search))
-         contacts
-         (filter #(or (= search (:first %)) (= search (:last %))) contacts))))
-
-(defn search-form
-  [search]
-  [:form
-   {:action "/contacts", :method "get", :class "tool-bar"}
-   [:label {:for "search"} "Search Term"]
-   [:input
-    {:id "search",
-     :type "search",
-     :name "search",
-     :value search}]
-   [:input {:type "submit", :value "Search"}]])
-
-(defn contact-row [{:keys [id first last phone email]}]
-  [:tr
-   [:td id]
-   [:td first]
-   [:td last]
-   [:td phone]
-   [:td email
-    [:a {:href (str "/contacts/" id "/edit")} "Edit"]
-    [:a {:href (str "/contacts/" id)} "View"]]])
-
-(defn contacts-table [contacts]
-  [:table
-   [:thead
-    [:tr [:td "ID"] [:th "First"] [:th "Last"] [:th "Phone"] [:th "Email"]]]
-   (concat [:tbody] (map contact-row contacts))])
-
-(defn contacts-handler
-  [{{{:keys [search]} :query} :parameters}]
-  (let [contacts (search-contacts search)]
-    (success
-     (str
-      (html [:div {:class "container"}
-             [:div {:class "search"} (search-form search)]
-             [:div {:class "contacts"} (contacts-table contacts)]])))))
 
 (def app
   (ring/ring-handler
    (ring/router
     [["/" {:get {:handler (fn [_req] (redirect "/contacts"))}}]
      ["/contacts" {:parameters {:query [:map [:search {:optional true} string?]]}
-                   :get {:handler contacts-handler}}]
+                   :get {:handler contacts/get-contacts-handler}}]
      ["/api"
       ["/math" {:get {:parameters {:query {:x int?, :y int?}}
                       :responses  {200 {:body {:total int?}}}
