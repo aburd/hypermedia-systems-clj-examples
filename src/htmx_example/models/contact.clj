@@ -9,10 +9,15 @@
   {:id (rand-int 1000) :first (name/first-name) :last (name/last-name) :phone (first (phone/phone-numbers)) :email (internet/email)})
 
 (defonce contacts
-  (atom (take
-         10
-         (repeatedly
-          #(generate-contact)))))
+  (atom [vec (take
+              10
+              (repeatedly
+               #(generate-contact)))]))
+
+; (reset! contacts (vec (take
+;                        10
+;                        (repeatedly
+;                         #(generate-contact)))))
 
 (defn search
   [search]
@@ -26,6 +31,16 @@
                         :last last
                         :phone phone
                         :email email}))
+
+(defn update [{:keys [id first last email phone]}]
+  (let [new-v (reduce
+               (fn [coll c]
+                 (conj coll (if (= id (:id c))
+                              {:id id :first first :last last :email email :phone phone}
+                              c)))
+               []
+               @contacts)]
+    (reset! contacts new-v)))
 
 (defn get [id]
   (first (filter #(= id (:id %)) @contacts)))

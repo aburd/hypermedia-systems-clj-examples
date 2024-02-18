@@ -30,6 +30,20 @@
       (not-found)
       (success (str (h/html (views/contacts-edit-page contact)))))))
 
+(defn contacts-update-handler
+  [{{{:keys [contact-id]} :path
+     {:keys [last_name first_name phone email]} :form}
+    :parameters}]
+  (let [contact (contact/get contact-id)]
+    (if (nil? contact)
+      (not-found)
+      (try
+        (contact/update {:id contact-id :first first_name :last last_name :email email :phone phone})
+        (redirect "/contacts")
+        (catch Exception e
+          (println e)
+          (redirect (format "/contacts/%s/edit" contact-id)))))))
+
 (defn contacts-create-handler
   [{{{:keys [last_name first_name phone email]} :form} :parameters}]
   (try

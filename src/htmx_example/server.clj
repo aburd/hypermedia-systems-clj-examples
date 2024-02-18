@@ -28,7 +28,13 @@
      ["/contacts/:contact-id/show" {:parameters {:path [:map [:contact-id int?]]}
                                     :get {:handler contacts/contacts-show-handler}}]
      ["/contacts/:contact-id/edit" {:parameters {:path [:map [:contact-id int?]]}
-                                    :get {:handler contacts/contacts-edit-handler}}]
+                                    :get {:handler contacts/contacts-edit-handler}
+                                    :post {:handler contacts/contacts-update-handler
+                                           :parameters {:form [:map
+                                                               [:first_name string?]
+                                                               [:last_name string?]
+                                                               [:phone string?]
+                                                               [:email string?]]}}}]
      ["/api"
       ["/math" {:get {:parameters {:query {:x int?, :y int?}}
                       :responses  {200 {:body {:total int?}}}

@@ -41,11 +41,11 @@
          [:div {:class "search"} (search-form search)]
          [:div {:class "contacts"} (contacts-table contacts)]]))
 
-(defn- contact-form [& {:keys [email first last phone]
-                        :or {email "" first "" last "" phone ""}}]
+(defn- contact-form [action & {:keys [email first last phone]
+                               :or {email "" first "" last "" phone ""}}]
   [:div
    [:form
-    {:action "/contacts/new", :method "post"}
+    {:action action :method "post"}
     [:fieldset
      [:legend "Contact Values"]
      [:div
@@ -108,14 +108,16 @@
   (html
    [:div {:class "container"}
     [:h1 "New Contact"]
-    [:div (contact-form)]]))
+    [:div (contact-form "/contacts/new")]]))
 
 (defn contacts-edit-page
   [contact]
   (html
    [:div {:class "container"}
-    [:h1 "Edit Contact"]
-    [:div (contact-form contact)]]))
+    [:h1 "Edit Contact 1"]
+    [:div (contact-form
+           (format "/contacts/%s/edit" (:id contact))
+           contact)]]))
 
 (defn contacts-show-page
   [{:keys [id phone email last first] :as _contact}]
