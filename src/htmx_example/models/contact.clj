@@ -14,16 +14,19 @@
               (repeatedly
                #(generate-contact))))))
 
-; (reset! contacts (vec (take
-;                        10
-;                        (repeatedly
-;                         #(generate-contact)))))
-
 (defn search
   [search]
   (vec (if (or (nil? search) (empty? search))
          @contacts
-         (filter #(or (s/includes? (:first %) search) (s/includes? (:last %) search)) @contacts))))
+         (filter
+          (fn [contact]
+            (let [first (s/lower-case (:first contact))
+                  last (s/lower-case (:last contact))
+                  search (s/lower-case search)]
+              (or
+               (s/includes? first search)
+               (s/includes? last search))))
+          @contacts))))
 
 (defn add [{:keys [first last email phone]}]
   (swap! contacts conj {:id (rand-int 1000)

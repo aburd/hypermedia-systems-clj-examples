@@ -16,8 +16,8 @@
       :class "form-control"
       :type "search",
       :name "search",
-      :value search}]]
-   [:button {:type "submit" :class "btn btn-primary"} "Search"]])
+      :value search}]]])
+   ; [:button {:type "submit" :class "btn btn-outline-primary"} "Search"]])
 
 (defn contact-row [{:keys [id first last phone email]}]
   (let [row-id (format "row-%s" id)
@@ -37,16 +37,17 @@
      [:td phone]
      [:td email]
      [:td
-      [:a
-       {:hx-get resource-edit-uri
+      [:button
+       {:class "btn btn-outline-primary btn-sm"
+        :hx-get resource-edit-uri
         :hx-target row-id-sel
         :hx-swap "outerHTML"}
        "Edit"]]
      [:td
-      [:a get-resource-attrs "View"]]
+      [:button (assoc get-resource-attrs :class "btn btn-outline-info btn-sm") "View"]]
      [:td
       [:button
-       {:class "btn btn-danger btn-sm"
+       {:class "btn btn-outline-danger btn-sm"
         :hx-delete resource-uri
         :hx-swap "delete"
         :hx-target row-id-sel
@@ -77,13 +78,13 @@
       [:td
        [:button
         {:type "submit"
-         :class "btn btn-primary"}
-        "Submit Edit"]]
+         :class "btn btn-success btn-sm"}
+        "Edit"]]
       [:td
-       [:a {:disabled true} "View"]]
+       [:button {:disabled true :class "btn btn-outline-info btn-sm"} "View"]]
       [:td
        [:button
-        {:class "btn btn-danger btn-sm"
+        {:class "btn btn-outline-danger btn-sm"
          :hx-delete resource-uri
          :hx-swap "delete"
          :hx-target row-id-sel
@@ -91,7 +92,7 @@
         "Delete"]]]]))
 
 (defn contacts-table [contacts]
-  [:table {:class "table table-hover"}
+  [:table {:class "table table-hover table-striped"}
    [:thead
     [:tr [:th "ID"] [:th "First"] [:th "Last"] [:th "Phone"] [:th "Email"] [:th] [:th] [:th]]]
    (vec (concat [:tbody] (map contact-row contacts)))])
@@ -103,7 +104,7 @@
          [:div {:class "search"} (search-form search)]
          [:div {:class "contacts"} (contacts-table contacts)]
          [:div
-          [:a {:class "btn btn-primary" :href "/contact"} "Create Contact"]]]))
+          [:a {:class "btn btn-outline-primary" :href "/contact"} "Create Contact"]]]))
 
 (defn- contact-form [action & {:keys [email first last phone]
                                :or {email "" first "" last "" phone ""}}]
@@ -164,7 +165,7 @@
         :placeholder "Phone",
         :value phone}]
       [:span {:class "error"} ""]]
-     [:button {:type "submit" :class "btn btn-primary"} "Save"]]]
+     [:button {:type "submit" :class "btn btn-outline-primary"} "Save"]]]
    [:p [:a {:href "/contacts"} "Back"]]])
 
 (defn contacts-new-page
