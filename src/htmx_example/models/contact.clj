@@ -44,3 +44,6 @@
 
 (defn get [id]
   (first (filter #(= id (:id %)) @contacts)))
+
+(defn delete [id]
+  (reset! contacts (vec (remove #(= id (:id %)) @contacts))))

@@ -26,12 +26,14 @@
    [:td
     [:a {:href (format "/contacts/%s/edit" id)} "Edit"]]
    [:td
-    [:a {:href (format "/contacts/%s/show" id)} "View"]]])
+    [:a {:href (format "/contacts/%s/show" id)} "View"]]
+   [:td
+    [:a {:href (format "/contacts/%s/delete" id)} "Delete"]]])
 
 (defn- contacts-table [contacts]
   [:table {:class "table"}
    [:thead
-    [:tr [:td "ID"] [:th "First"] [:th "Last"] [:th "Phone"] [:th "Email"] [:th] [:th]]]
+    [:tr [:td "ID"] [:th "First"] [:th "Last"] [:th "Phone"] [:th "Email"] [:th] [:th] [:th]]]
    (vec (concat [:tbody] (map contact-row contacts)))])
 
 (defn contacts-page [contacts search]
@@ -39,7 +41,9 @@
          [:h1 "Contacts"]
          [:h2 "A Demo Contacts Application"]
          [:div {:class "search"} (search-form search)]
-         [:div {:class "contacts"} (contacts-table contacts)]]))
+         [:div {:class "contacts"} (contacts-table contacts)]
+         [:div
+          [:a {:class "btn btn-primary" :href "/contacts/new"} "Create Contact"]]]))
 
 (defn- contact-form [action & {:keys [email first last phone]
                                :or {email "" first "" last "" phone ""}}]

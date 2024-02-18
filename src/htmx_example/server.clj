@@ -27,6 +27,8 @@
                               :handler contacts/contacts-create-handler}}]
      ["/contacts/:contact-id/show" {:parameters {:path [:map [:contact-id int?]]}
                                     :get {:handler contacts/contacts-show-handler}}]
+     ["/contacts/:contact-id/delete" {:parameters {:path [:map [:contact-id int?]]}
+                                      :get {:handler contacts/contacts-delete-handler}}]
      ["/contacts/:contact-id/edit" {:parameters {:path [:map [:contact-id int?]]}
                                     :get {:handler contacts/contacts-edit-handler}
                                     :post {:handler contacts/contacts-update-handler
