@@ -1,8 +1,12 @@
-Just some examples from the book but adopted for Clojure, rather than Python.
+Just some examples from the [Hypermedia Systems book](https://hypermedia.systems) but adopted for Clojure.
 
-The book can be found [here](https://hypermedia.systems).
+**Points of interest:**
 
-Stack:
+- SPA-like - No hard reloads, no FOUC
+- Although HTMX script is included, I didn't have to write any JS.
+- The entire app is ~300 lines? The equivalent for an SPA would likely be more, not to mention the hassle of the transpilation necessary etc.
+
+**Stack:**
 
 - http server - ring/reitit
 - html - hiccup
