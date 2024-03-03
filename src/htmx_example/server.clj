@@ -8,6 +8,7 @@
    [reitit.ring.middleware.parameters :as parameters]
    [ring.adapter.jetty :as jetty]
    [htmx-example.controllers.contacts :as contacts]
+   [htmx-example.controllers.archives :as archives]
    [htmx-example.response :refer [redirect]]
    [ring.logger :as logger]))
 
@@ -17,6 +18,18 @@
   (ring/ring-handler
    (ring/router
     [["/" {:get {:handler (fn [_req] (redirect "/contacts"))}}]
+     ["/archives" {:parameters {}
+                   :get {:handler archives/archives-handler}
+                   :post {:parameters {:form [:map
+                                              [:archive_id string?]
+                                              [:dir_path string?]]}
+                          :handler archives/archives-create-handler}}]
+     ["/archives/:archive-id" {:parameters {:path [:map [:archive-id string?]]}
+                               :get {:handler archives/archive-handler}}]
+     ["/archives/:archive-id/status" {:parameters {:path [:map [:archive-id string?]]}
+                                      :get {:handler archives/archive-get-status-handler}}]
+     ["/archives/:archive-id/download" {:parameters {:path [:map [:archive-id string?]]}
+                                        :get {:handler archives/archive-download-handler}}]
      ["/contacts" {:parameters {:query [:map [:search {:optional true} string?]]}
                    :get {:handler contacts/contacts-handler}}]
      ["/contacts-table" {:parameters {:query [:map [:search {:optional true} string?]]}

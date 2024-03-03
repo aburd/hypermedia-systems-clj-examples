@@ -11,7 +11,8 @@
                  [metosin/muuntaja "0.6.8"]
                  [hiccup "2.0.0-RC3"]
                  [expound "0.9.0"]
-                 [faker "0.2.2"]]
+                 [faker "0.2.2"]
+                 [babashka/process "0.5.22"]]
   :main ^:skip-aot htmx-example.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all
