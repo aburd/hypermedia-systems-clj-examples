@@ -21,7 +21,6 @@
 
 (defn contact-row [{:keys [id first last phone email]}]
   (let [row-id (format "row-%s" id)
-        row-id-sel (str "#" row-id)
         resource-uri (format "/contacts/%s" id)
         resource-edit-uri (format "/contacts/%s/edit" id)
         get-resource-attrs {:hx-get resource-uri
@@ -30,7 +29,8 @@
                             :hx-push-url resource-uri}
         delete-confirm-msg (format "Do you really want to delete %s %s as a contact?" first last)]
     [:tr
-     {:id row-id}
+     {:id row-id
+      :class "transition-all-1s"}
      [:td [:a get-resource-attrs id]]
      [:td first]
      [:td last]
@@ -40,7 +40,7 @@
       [:button
        {:class "btn btn-outline-primary btn-sm"
         :hx-get resource-edit-uri
-        :hx-target row-id-sel
+        :hx-target "closest tr"
         :hx-swap "outerHTML"}
        "Edit"]]
      [:td
@@ -49,8 +49,8 @@
       [:button
        {:class "btn btn-outline-danger btn-sm"
         :hx-delete resource-uri
-        :hx-swap "delete"
-        :hx-target row-id-sel
+        :hx-swap "delete swap:1s"
+        :hx-target "closest tr"
         :hx-confirm delete-confirm-msg}
        "Delete"]]]))
 
